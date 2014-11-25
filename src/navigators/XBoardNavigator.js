@@ -50,6 +50,25 @@ XBoardNavigator.prototype.hideAll = function() {
 XBoardNavigator.prototype.receiveXBoardData = function(jiraData) {
     //TODO: Cleanup this architecture, we need to pass epics data to the app nicely somehow
     epics = jiraData.epicData.epics;
+
+    epicColors = {
+        "DevOps": "#d39c3f",
+        "Go-Live": "#654982",
+        "CI & Build": "#3b7fc4",
+        "Installation": "#3b7fc4",
+        "Permissioning": "#ac707a",
+        "Passport Integration": "#d39c3f",
+        "Charting": "#3b7fc4",
+        "Research": "#d39c3f",
+        "Sign-On": "#ea632b",
+        "Testing": "#ac707a",
+        "Training": "#654982",
+        "User Manager": "#815b3a",
+        "Infrastructure": "##815b3a"
+    }
+
+
+
     this.sprints = this.getSprints(jiraData);
     this.xBoardSprintsDropDown.visible(true);
     JiraNavigator.setDropDown(this.xBoardSprintsDropDown.options, this.sprints, "name", "name");
