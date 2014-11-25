@@ -40,7 +40,7 @@ select {
 
 .sidebar {
 	text-align: center;
-	width: 70px;
+	width: 65px;
 	height: 267px;
 	clear: both;
 	top: 52px;
@@ -127,12 +127,12 @@ select {
 	font-size: 80%;
 	font-weight: bolder;
 	float: left;
-	width: 35%;
+	width: 40%;
 	line-height: 25px;
 }
 
 .estimate {
-	width: 15%;
+	width: 20%;
 }
 
 .estimate-number {
@@ -140,11 +140,11 @@ select {
 	font-weight: bold;
 }
 .actual {
-	width: 15%;
+	width: 20%;
 }
 
 .owner {
-	width: 35%;
+	width: 20%;
 }
 
 .Doc, .Demo, .Review, .Rel_Note, .Wiki, .PO_Approval, .ACs{
@@ -176,6 +176,12 @@ select {
 	font-weight: bolder;
 	display: block;
 	padding-bottom: 1em;
+}
+
+.parentSummary {
+	max-height: 70px;
+	overflow: hidden;
+	padding-bottom: 0px;
 }
 
 .tag {

@@ -17,8 +17,8 @@ CardView.prototype.getElement = function () {
 		this.element = document.createElement('div');
 		this.element.className = "ticket "+(this.isColorEnabled ? "color" : "mono")+" "+this.cardModel.issueType.replace(" ", "_");
 
-		this.addTitle(this.cardModel.issueId, this.cardModel.estimate, this.cardModel.parentIssueId);
-		this.addSideBar(this.isQRCodeEnabled, this.cardModel.issueUrl, this.cardModel.priorityImage);
+		this.addTitle(this.cardModel.issueId, this.cardModel.estimate, this.cardModel.parentIssueId, this.cardModel.priorityImage);
+		this.addSideBar(this.isQRCodeEnabled, this.cardModel.issueUrl);
 		this.addSummary(this.cardModel.summary, this.getCardParentSummary(), this.cardModel.component, this.cardModel.tag, this.cardModel.businessValue, this.cardModel.epic);
 	}
 	return this.element;
@@ -26,7 +26,7 @@ CardView.prototype.getElement = function () {
 
 CardView.prototype.getCardParentSummary = function() {
 	var parentIssue = this.issueMap[this.cardModel.parentIssueId];
-	return parentIssue != null ? parentIssue.summary : null;
+	return parentIssue != null ? "Parent: " + parentIssue.issueId: null;
 }
 
 CardView.prototype.addTitle = function (issueId, estimate, parent, priorityImage) {
@@ -45,13 +45,18 @@ CardView.prototype.addTitle = function (issueId, estimate, parent, priorityImage
 	var actualElement = this.createTitleElement("Actual");
 	actualElement.className += " actual";
 
-	var ownerElement = this.createTitleElement("Owner");
+	var ownerElement = this.createTitleElement("");
 	ownerElement.className += " owner";
+	
+	if (priorityImage) {
+		var priorityElement = this.getPriorityElement(priorityImage)
+		ownerElement.appendChild(priorityElement);
+	}
 
+	titleElement.appendChild(ownerElement);
 	titleElement.appendChild(issueIdElement);
 	titleElement.appendChild(estimateElement);
 	titleElement.appendChild(actualElement);
-	titleElement.appendChild(ownerElement);
 	
 	this.element.appendChild(titleElement);
 };
@@ -60,15 +65,11 @@ CardView.prototype.addSummary = function (summary, parentSummary, component, tag
 	var sideElement = document.createElement("div");
 	sideElement.className = "summaryElement";
 
-    if (this.isComponentEnabled && component != null) {
-        sideElement.innerHTML += "<span class='component'>" + component + "</span>";
-    }
-
     if (this.isEpicEnabled && epic != null && typeof epics !== "undefined") {
         var epicData = epics.filter(function(_) {
             return _.key === epic
         })[0];
-        sideElement.innerHTML += "<span class='epic' style='background-color: " + epicData.epicColor + "'>" + epicData.epicLabel + "</span>";
+        sideElement.innerHTML += "<span class='epic' style='background-color: " + epicData.epicColor + "'>" + epicData.epicLabel + "</span><br /><br />";
     }
 
 	if (this.isParentDescriptionEnabled && parentSummary != null) {
@@ -94,7 +95,7 @@ CardView.prototype.addSummary = function (summary, parentSummary, component, tag
 	this.element.appendChild(sideElement);
 };
 
-CardView.prototype.addSideBar = function (bAddQRCode, url, priorityImage) {
+CardView.prototype.addSideBar = function (bAddQRCode, url) {
 	var sideElement = document.createElement("div");
 	sideElement.className = "sidebar";
 
@@ -111,12 +112,8 @@ CardView.prototype.addSideBar = function (bAddQRCode, url, priorityImage) {
 	// 	qrcodeElement.innerHTML = '<img src="http://qr.kaywa.com/?s=8&d=' + encodeURIComponent(url) + '" alt="QRCode"/>';
 	// 	sideElement.appendChild(qrcodeElement);
 	// }
-
-	if (priorityImage) {
-		var priorityElement = this.getPriorityElement(priorityImage)
-		sideElement.appendChild(priorityElement);
-	}
-
+	
+	
 	this.element.appendChild(sideElement);
 };
 
@@ -167,10 +164,10 @@ CardView.prototype.createSummaryElement = function (text) {
 CardView.prototype.getPriorityElement = function(imgUrl) {
 	var priorityImage = document.createElement("img");
 	priorityImage.style.position = "absolute";
-	priorityImage.style.bottom = "5px";
-	priorityImage.style.right = "5px";
-	priorityImage.style.width = "70px";
-	priorityImage.style.height = "70px";
+	priorityImage.style.top = "-5px";
+	priorityImage.style.left = "0px";
+	priorityImage.style.width = "60px";
+	priorityImage.style.height = "60px";
 
 	priorityImage.src = imgUrl;
 
