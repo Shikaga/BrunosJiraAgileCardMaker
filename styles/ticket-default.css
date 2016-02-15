@@ -19,6 +19,8 @@ select {
 	bottom: 0px;
 	margin-top: auto;
 	position: absolute;
+	font-size: 23px;
+	padding: 11px;
 }
 
 .ticket {
