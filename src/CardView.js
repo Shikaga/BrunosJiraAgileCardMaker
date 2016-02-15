@@ -19,6 +19,7 @@ CardView.prototype.getElement = function () {
 
 		this.addTitle(this.cardModel.issueId, this.cardModel.estimate, this.cardModel.parentIssueId, this.cardModel.priorityImage);
 		this.addSideBar(this.isQRCodeEnabled, this.cardModel.issueUrl);
+		this.addBottomLeft(this.cardModel.moscow);
 		this.addSummary(this.cardModel.summary, this.getCardParentSummary(), this.cardModel.component, this.cardModel.tag, this.cardModel.businessValue, this.cardModel.epic);
 	}
 	return this.element;
@@ -27,6 +28,15 @@ CardView.prototype.getElement = function () {
 CardView.prototype.getCardParentSummary = function() {
 	var parentIssue = this.issueMap[this.cardModel.parentIssueId];
 	return parentIssue != null ? "Parent: " + parentIssue.issueId: null;
+}
+
+CardView.prototype.addBottomLeft = function(moscow) {
+	if (moscow) {
+		var bottomLeft = document.createElement("div");
+		bottomLeft.className = "bottomLeft";
+		bottomLeft.innerHTML = moscow.value;
+		this.element.appendChild(bottomLeft);
+	}
 }
 
 CardView.prototype.addTitle = function (issueId, estimate, parent, priorityImage) {

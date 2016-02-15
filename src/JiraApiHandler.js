@@ -1,7 +1,7 @@
 var JiraApiHandler = function(jiraUrl, listener) {
-    var username = document.getElementById("username").value;
-    var password = document.getElementById("password").value;
-    this.jiraApi = new JiraApi(jiraUrl, true, username, password);
+	var username = document.getElementById("username").value;
+	var password = document.getElementById("password").value;
+	this.jiraApi = new JiraApi(jiraUrl, true, username, password);
 	this.baseUrl = jiraUrl;
 	this.listener = listener;
 	this.jiraMap = {};
@@ -13,9 +13,9 @@ var JiraApiHandler = function(jiraUrl, listener) {
 
 // Interface method - requestIssues passing in an array of issue ids.
 JiraApiHandler.prototype.requestIssues = function(issueIds, callback) {
-    //TODO: This will break if invoked twice quickly.
+	//TODO: This will break if invoked twice quickly.
 	if (!this.requested) {
-        this.requestIssuesCallback = callback;
+		this.requestIssuesCallback = callback;
 		this.requested = true;
 		this.requestJiras(issueIds);
 		this.chosenIssues = issueIds;
@@ -25,7 +25,7 @@ JiraApiHandler.prototype.requestIssues = function(issueIds, callback) {
 };
 
 JiraApiHandler.prototype.requestJiras = function(jiraIds) {
-    jiraIds = _.uniq(jiraIds);
+	jiraIds = _.uniq(jiraIds);
 	this.expectedCallbacks = jiraIds.length;
 	this.callbacksReceived = 0;
 	this.requestJirasWithSQL(jiraIds, this.processCardsData.bind(this));
@@ -49,16 +49,16 @@ JiraApiHandler.prototype.parentsNotLoaded = function () {
 	var parentsNotLoaded = [];
 	for (var index in this.jiraMap) {
 		var card = this.jiraMap[index];
-        if (!this.isParentLoaded(card)) {
-            parentsNotLoaded.push(card.parentIssueId);
-        }
-        for (var i=0; i < card.subtasks.length; i++) {
-            var subtaskId = card.subtasks[i];
-            if (this.jiraMap[subtaskId] == null) {
-                parentsNotLoaded.push(subtaskId);
-                this.chosenIssues.push(subtaskId);
-            }
-        }
+		if (!this.isParentLoaded(card)) {
+			parentsNotLoaded.push(card.parentIssueId);
+		}
+		for (var i=0; i < card.subtasks.length; i++) {
+			var subtaskId = card.subtasks[i];
+			if (this.jiraMap[subtaskId] == null) {
+				parentsNotLoaded.push(subtaskId);
+				this.chosenIssues.push(subtaskId);
+			}
+		}
 	}
 	return parentsNotLoaded
 };
@@ -98,11 +98,12 @@ JiraApiHandler.prototype.createCard = function (jira) {
 		jira.fields.summary,
 		componentString,
 		jira.fields["customfield_10151"],
-        jira.fields["customfield_10261"],
-        jira.fields["customfield_10870"],
+		jira.fields["customfield_10261"],
+		jira.fields["customfield_10870"],
+		jira.fields["customfield_11470"],
 		jira.fields.parent ? jira.fields.parent.key : null,
 		jira.fields.priority ? jira.fields.priority.iconUrl : null,
-        jira.fields.subtasks.map(function(_) {return _.key})
+		jira.fields.subtasks.map(function(_) {return _.key})
 	);
 	return card;
 };
@@ -112,12 +113,12 @@ JiraApiHandler.prototype.renderCardsIfReady = function () {
 		this.requestJiras(parentsNotLoaded);
 	if (parentsNotLoaded.length !== 0) {
 	} else {
-        this.requestIssuesCallback(this.chosenIssues, this.jiraMap);
+		this.requestIssuesCallback(this.chosenIssues, this.jiraMap);
 	}
 };
 
 JiraApiHandler.prototype.getRapidBoardSprint = function(viewId, sprintId, callback) {
-    this.jiraApi.getGreenhopperSprint(callback, viewId, sprintId);
+	this.jiraApi.getGreenhopperSprint(callback, viewId, sprintId);
 }
 
 JiraApiHandler.prototype.requestRapidSprints = function(sprintId, callback) {
@@ -166,8 +167,8 @@ JiraApiHandler.prototype.requestFixVersions = function(project, callback) {
 
 JiraApiHandler.prototype.requestFixVersion = function(project, fixversion, callback) {
 
-    jiraUrl = this.baseUrl + "/rest/api/latest/search?jql=project=" + project + "%20AND%20fixversion=" + fixversion + "&fields=key&maxResults=1000";
-    this.jiraApi.jch.getData(callback, jiraUrl);
+	jiraUrl = this.baseUrl + "/rest/api/latest/search?jql=project=" + project + "%20AND%20fixversion=" + fixversion + "&fields=key&maxResults=1000";
+	this.jiraApi.jch.getData(callback, jiraUrl);
 };
 
 JiraApiHandler.prototype.requestJirasWithSQL = function(jiraIds,callback) {
